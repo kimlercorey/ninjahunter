@@ -236,7 +236,7 @@ public class NinjaHunter extends SimpleApplication
             }
             
             // Update HUD resources
-            nifty.getCurrentScreen().findElementByName("score").getRenderer(TextRenderer.class).setText("Score: " + score);
+            nifty.getCurrentScreen().findElementByName("score").getRenderer(TextRenderer.class).setText("Score: " + score + " High: TODO");
             nifty.getCurrentScreen().findElementByName("timeLeft").getRenderer(TextRenderer.class).setText("Elapsed Time: " + levelTime/60 + ":" + levelTime%60);
             nifty.getCurrentScreen().findElementByName("bulletsFired").getRenderer(TextRenderer.class).setText("Bullets Fired: " + bulletsFired + "/unlimited");
             nifty.getCurrentScreen().findElementByName("target0Score").getRenderer(TextRenderer.class).setText("Ninja0: " + targetScore[0]);
