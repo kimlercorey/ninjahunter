@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <!--                          LOAD STYLES AND CONTROLS                       -->
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --> 
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <!--                              START SCREEN                               -->
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="start" controller="cmsc325.finalProject.MyStartScreen">
+    <layer id="background" childLayout="center">
+      <panel id="text1" height="25%" width="400px" align="center" childLayout="center">
+      <text wrap="true" text="
+
+Welcome to Ninja Hunter by Team Asteroids! &#10;
+TODO: Add Instructions &#10;
+&#10;
+TODO: Add Instructions &#10;
+&#10;
+TODO: Add Instructions &#10;
+&#10;
+TODO: Add Instructions &#10;
+&#10;
+TODO: Add Instructions &#10;
+&#10;&#10;&#10;&#10;&#10;&#10;                                                                
+
+
+
+" font="Interface/Fonts/Default.fnt" width="100%" height="100%" />
+      </panel>
+    </layer>
+    <layer id="foreground" childLayout="vertical">
+      <panel id="panel_top" height="25%" width="75%" align="center" childLayout="center"> 
+        <text text="NinjaHunter by Team Asteroids" font="Interface/Fonts/Default.fnt" width="100%" height="100%" /> 
+      </panel>
+      <panel id="panel_mid" height="60%" width="75%" align="center" childLayout="vertical">  
+        <panel id="panel_mid_top" height="99%" width="100%" valign="center" childLayout="center">
+        </panel>
+        <panel id="panel_mid_bottom" height="1%" width="100%" valign="center" childLayout="center">
+          <text text="Select Player:" font="Interface/Fonts/Default.fnt" width="100%" height="100%" /> 
+        </panel>
+      </panel>
+      <panel id="panel_bottom" height="15%" width="75%" align="center" childLayout="horizontal">  
+        <!-- +++++++++++++++++++++++ START BUTTON +++++++++++++++++++++++++++++++ -->
+        <panel id="panel_bottom_left" height="50%" width="40%" valign="center" childLayout="center">
+          <control name="button" label="Start" id="StartButton" align="center" valign="center" visibleToMouse="true">
+            <interact onClick="startGame(hud)"/>
+          </control>
+        </panel>
+        <!-- +++++++++++++++++++++++ Players BUTTONs +++++++++++++++++++++++++++++++ -->
+        <panel id="panel_bottom_mid" height="50%" width="20%" valign="center" childLayout="center">
+          <!-- <control name="button" label="Player 1" id="Player1Button" align="left" valign="center" visibleToMouse="true">
+            <interact onClick="playerName(Player 1)"/>
+          </control>
+          <control name="button" label="Player 2" id="Player2Button" align="right" valign="center" visibleToMouse="true">
+            <interact onClick="playerName(Player 2)"/>
+          </control> -->
+        </panel>
+        <!-- +++++++++++++++++++++++ QUIT BUTTON ++++++++++++++++++++++++++++++++ -->
+        <panel id="panel_bottom_right" height="50%" width="40%" valign="center" childLayout="center">
+          <control name="button" label="Quit" id="QuitButton" align="center" valign="center" visibleToMouse="true">
+            <interact onClick="quitGame()"/>
+          </control>
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <!--                              HUD SCREEN                                 -->
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="hud" controller="cmsc325.finalProject.MyStartScreen">
+    <layer id="background" childLayout="center">
+    </layer>
+    <layer id="foreground" childLayout="horizontal">
+      <panel id="panel_left" width="80%" height="100%" childLayout="vertical">  
+        <panel id="panel_top_left" width="100%" height="5%" childLayout="center">
+          <!-- <text id="playerName" text="Player 1" font="Interface/Fonts/Default.fnt" width="100%" height="100%" /> -->
+        </panel>
+        <panel id="panel_bottom_left" width="100%" height="95%" childLayout="center"> 
+        </panel>
+      </panel>
+      <panel id="panel_right" width="20%" height="100%" childLayout="vertical">  
+        <panel id="panel_top_right1" width="100%" height="15%" childLayout="vertical">
+          <text id="score" text="Score: 0" font="Interface/Fonts/Default.fnt" width="100%" height="75%" />  
+		  <text id="timeLeft" text="Time Remaining: 5:00" font="Interface/Fonts/Default.fnt" width="100%" height="25%" />  
+        </panel>
+        <panel id="panel_top_right2" width="100%" height="15%" childLayout="center">  
+        </panel>
+        <panel id="panel_bot_right" width="100%" height="70%" valign="center">  
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <!--                             PAUSE SCREEN                                -->
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="pause" controller="cmsc325.finalProject.MyStartScreen">
+    <layer id="background" childLayout="center">
+        <!-- 
+      <image filename="Interface/Images/Coin.jpg" height="50%" width="50%"></image>
+        -->
+    </layer>
+    <layer id="foreground" childLayout="vertical">
+      <panel id="panel_top" height="25%" width="75%" align="center" childLayout="center"> 
+        <text text="NinjaHunter by Team Asteroids" font="Interface/Fonts/Default.fnt" width="100%" height="100%" /> 
+      </panel>
+      <panel id="panel_mid" height="60%" width="75%" align="center" childLayout="vertical">  
+	    <panel id="panel_mid_top" height="99%" width="100%" valign="center" childLayout="center">
+        </panel>
+		<!-- +++++++++++++++++++++++ SHOP BUTTON +++++++++++++++++++++++++++++++++ -->
+        <panel id="panel_mid_bottom" height="1%" width="100%" valign="center" childLayout="center">
+          <!-- 
+		  <control name="button" label="Shop" id="shopButton" align="center" valign="center" visibleToMouse="true">
+            <interact onClick="enterShop(shop)"/>
+          </control> 
+		  -->
+        </panel>
+      </panel>
+      <panel id="panel_bottom" height="15%" width="75%" align="center" childLayout="horizontal">  
+        <!-- +++++++++++++++++++++++ RESUME BUTTON +++++++++++++++++++++++++++++++ -->
+        <panel id="panel_bottom_left" height="50%" width="40%" valign="center" childLayout="center">
+          <control name="button" label="Resume" id="resumeButton" align="center" valign="center" visibleToMouse="true">
+            <interact onClick="resumeGame(hud)"/>
+          </control>
+        </panel>
+        <!-- +++++++++++++++++++++++ Players BUTTONs +++++++++++++++++++++++++++++++ -->
+        <panel id="panel_bottom_mid" height="50%" width="20%" valign="center" childLayout="center">
+          <!-- 
+		  <control name="button" label="Player 1" id="player1Button" align="left" valign="center" visibleToMouse="true">
+            <interact onClick="playerName(Player 1)"/>
+          </control>
+          <control name="button" label="Player 2" id="player2Button" align="right" valign="center" visibleToMouse="true">
+            <interact onClick="playerName(Player 2)"/>
+          </control> 
+		  -->
+        </panel>
+        <!-- +++++++++++++++++++++++ QUIT BUTTON ++++++++++++++++++++++++++++++++ -->
+        <panel id="panel_bottom_right" height="50%" width="40%" valign="center" childLayout="center">
+          <control name="button" label="Quit" id="quitButton" align="center" valign="center" visibleToMouse="true">
+            <interact onClick="quitGame()"/>
+          </control>
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+  
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <!--                             SHOP SCREEN                                 -->
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <!-- 
+  <screen id="shop" controller="cmsc325.finalProject.MyStartScreen">
+    <layer id="background" childLayout="center">
+      <image filename="Interface/Images/ShopBackground.jpg" height="100%" width="100%"></image>
+    </layer>
+    <layer id="foreground" childLayout="vertical">
+      <panel id="panel_top" height="35%" width="75%" align="center" childLayout="center"> 
+        <text text="Flip3D Shop" font="Interface/Fonts/Default.fnt" width="100%" height="100%" /> 
+      </panel>
+      <panel id="panel_mid" height="10%" width="75%" align="center" childLayout="horizontal">  
+	    <panel id="panel_mid_left" height="100%" width="65%" valign="center" childLayout="horizontal">
+	      <text text="LUCKY CHARM - Increases money gained from a successful bet by 20%. Cost: $1000" font="Interface/Fonts/Default.fnt" color="#0000FF" width="100%" height="100%" />
+	-->
+		  <!-- +++++++++++++++++++++++ PURCHASE LUCKY CHARM BUTTON +++++++++++++++++++++++++++++++++ -->
+	      <!-- 
+		  <control name="button" label="Purchase" id="purchaseLuckyCharmButton" valign="center" visibleToMouse="true">
+            <interact onClick="purchaseLuckyCharm()"/>
+          </control>
+        </panel>
+		<panel id="panel_mid_right" height="100%" width="35%" valign="center" childLayout="center">
+        </panel>
+      </panel>
+	  <panel id="panel_mid2" height="10%" width="75%" align="center" childLayout="horizontal">  
+	    <panel id="panel_mid_left" height="50%" width="65%" valign="center" childLayout="horizontal">
+	      <text text="POKER TABLE - Converts your table into a poker table.                           
+		  Cost: $250" font="Interface/Fonts/Default.fnt" color="#0000FF" width="100%" height="100%" />
+		  -->
+		  <!-- +++++++++++++++++++++++ PURCHASE POKER TABLE BUTTON +++++++++++++++++++++++++++++++++ -->
+	      <!--
+		  <control name="button" label="Purchase" id="purchasePokerTableButton" valign="center" visibleToMouse="true">
+            <interact onClick="purchaseTableMesh(pokerBackground.jpg)"/>
+          </control>
+        </panel>
+		<panel id="panel_mid_right" height="100%" width="35%" valign="center" childLayout="center">
+        </panel>
+      </panel>
+	  <panel id="panel_mid3" height="10%" width="75%" align="center" childLayout="horizontal">  
+	    <panel id="panel_mid_left" height="50%" width="65%" valign="center" childLayout="horizontal">
+	      <text text="METAL TABLE - Converts your table into a metal table.                           
+		  Cost: $250" font="Interface/Fonts/Default.fnt" color="#0000FF" width="100%" height="100%" />
+		  -->
+		  <!-- +++++++++++++++++++++++ PURCHASE METAL TABLE BUTTON +++++++++++++++++++++++++++++++++ -->
+	      <!-- 
+		  <control name="button" label="Purchase" id="purchaseMetalTableButton" valign="center" visibleToMouse="true">
+            <interact onClick="purchaseTableMesh(metalBackground.jpg)"/>
+          </control>
+        </panel>
+		<panel id="panel_mid_right" height="100%" width="35%" valign="center" childLayout="center">
+        </panel>
+      </panel>
+	  <panel id="panel_mid3" height="10%" width="75%" align="center" childLayout="horizontal">  
+	    <panel id="panel_mid_left" height="50%" width="65%" valign="center" childLayout="horizontal">
+	      <text text="RAINBOW COIN - Makes your coin change colors during each flip!    
+    		  Cost: $250" font="Interface/Fonts/Default.fnt" color="#0000FF" width="100%" height="100%" />
+		  -->
+		  <!-- +++++++++++++++++++++++ PURCHASE RAINBOW COIN BUTTON +++++++++++++++++++++++++++++++++ -->
+	      <!--
+		  <control name="button" label="Purchase" id="purchaseRainbowCoinButton" valign="center" visibleToMouse="true">
+            <interact onClick="purchaseRainbowCoin()"/>
+          </control>
+        </panel>
+		<panel id="panel_mid_right" height="100%" width="35%" valign="center" childLayout="center">
+        </panel>
+      </panel>
+      <panel id="panel_bottom" height="35%" width="75%" align="center" childLayout="horizontal">  
+        <panel id="panel_bottom_left" height="50%" width="40%" valign="center" childLayout="center">
+        </panel>
+        <panel id="panel_bottom_mid" height="50%" width="20%" valign="center" childLayout="center">
+        </panel>
+        -->
+		<!-- +++++++++++++++++++++++ EXIT SHOP BUTTON ++++++++++++++++++++++++++++++++ -->
+        <!-- 
+		<panel id="panel_bottom_right" height="50%" width="40%" valign="center" childLayout="center">
+          <control name="button" label="Exit Shop" id="exitShopButton" align="center" valign="center" visibleToMouse="true">
+            <interact onClick="exitShop(pause)"/>
+          </control>
+        </panel>
+      </panel>
+    </layer>
+  </screen> 
+  -->
+</nifty>
