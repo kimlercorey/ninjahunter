@@ -56,6 +56,7 @@ public class NinjaHunter extends SimpleApplication
     Spatial[] ninja;
     RigidBodyControl[] ninjaBody;
     CollisionShape[] ninjaShape;
+    int[] targetScore;
     private String lastA = null;
     private String lastB = null;
     private static final SphereCollisionShape sphereCollisionShape;
@@ -237,8 +238,12 @@ public class NinjaHunter extends SimpleApplication
             // Update HUD resources
             nifty.getCurrentScreen().findElementByName("score").getRenderer(TextRenderer.class).setText("Score: " + score);
             nifty.getCurrentScreen().findElementByName("timeLeft").getRenderer(TextRenderer.class).setText("Elapsed Time: " + levelTime/60 + ":" + levelTime%60);
-            nifty.getCurrentScreen().findElementByName("bulletsFired").getRenderer(TextRenderer.class).setText(bulletsFired);
-            //Add the other resources right here to be updated on the HUD... be sure to add element to XML file first
+            nifty.getCurrentScreen().findElementByName("bulletsFired").getRenderer(TextRenderer.class).setText("Bullets Fired: " + bulletsFired + "/unlimited");
+            nifty.getCurrentScreen().findElementByName("target0Score").getRenderer(TextRenderer.class).setText("Ninja0: " + targetScore[0]);
+            nifty.getCurrentScreen().findElementByName("target1Score").getRenderer(TextRenderer.class).setText("Ninja1: " + targetScore[1]);
+            nifty.getCurrentScreen().findElementByName("target2Score").getRenderer(TextRenderer.class).setText("Ninja2: " + targetScore[2]);
+            nifty.getCurrentScreen().findElementByName("target3Score").getRenderer(TextRenderer.class).setText("Ninja3: " + targetScore[3]);
+            nifty.getCurrentScreen().findElementByName("target4Score").getRenderer(TextRenderer.class).setText("Ninja4: " + targetScore[4]);
         }
     }
   
@@ -256,6 +261,7 @@ public class NinjaHunter extends SimpleApplication
         ninjaBody = new RigidBodyControl[10];
         ninja = new Spatial[10];
         ninjaShape = new CollisionShape[10];
+        targetScore = new int[10];
 
         for (int i=0;i<5;i++) {
             ninja[i] = assetManager.loadModel("Models/Ninja/Ninja.mesh.xml");
@@ -272,6 +278,9 @@ public class NinjaHunter extends SimpleApplication
             // Attach ninja to scene and add to physics space
             rootNode.attachChild(ninja[i]);
             bulletAppState.getPhysicsSpace().add(ninja[i]);
+            
+            // Initialize the score variable
+            targetScore[i] = 0;
         }
     }
   
@@ -365,7 +374,11 @@ public class NinjaHunter extends SimpleApplication
                   // loop to check which ninja was hit
                   for (int z = 0;z<5;z++) {
                       if (ninjaNode.equals(ninja[z])) {
+                          // which ninja died?
                           deadNinja = z;
+                          
+                          // increment score for that target!
+                          targetScore[z] += 100;
                       }
                   }
                   
