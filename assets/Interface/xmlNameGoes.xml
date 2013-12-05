@@ -86,13 +86,21 @@ TODO: Add Instructions &#10;
         </panel>
       </panel>
       <panel id="panel_right" width="20%" height="100%" childLayout="vertical">  
-        <panel id="panel_top_right1" width="100%" height="15%" childLayout="vertical">
-          <text id="score" text="Score: 0" font="Interface/Fonts/Default.fnt" width="100%" height="75%" />  
-		  <text id="timeLeft" text="Time Remaining: 5:00" font="Interface/Fonts/Default.fnt" width="100%" height="25%" />  
+        <panel id="panel_top_right1" width="100%" height="30%" childLayout="vertical">
+          <text id="score" text="Score: 0 High: TODO" font="Interface/Fonts/Default.fnt" width="100%" height="10%" />  
+	  <text id="timeLeft" text="Time Remaining: 5:00" font="Interface/Fonts/Default.fnt" width="100%" height="10%" /> 
+	  <text id="bulletsFired" text="Bullets Fired: 0/unlimited" font="Interface/Fonts/Default.fnt" width="100%" height="10%" />
+	  <text id="targetsScore" text="Score per Target:" font="Interface/Fonts/Default.fnt" width="100%" height="10%" />
+	  <text id="target0Score" text="Ninja0: 0" font="Interface/Fonts/Default.fnt" width="100%" height="10%" />
+	  <text id="target1Score" text="Ninja1: 0" font="Interface/Fonts/Default.fnt" width="100%" height="10%" />
+	  <text id="target2Score" text="Ninja2: 0" font="Interface/Fonts/Default.fnt" width="100%" height="10%" />
+	  <text id="target3Score" text="Ninja3: 0" font="Interface/Fonts/Default.fnt" width="100%" height="10%" />
+	  <text id="target4Score" text="Ninja4: 0" font="Interface/Fonts/Default.fnt" width="100%" height="10%" />
+	  <text id="emptySpace" text=" " font="Interface/Fonts/Default.fnt" width="100%" height="10%" />
         </panel>
-        <panel id="panel_top_right2" width="100%" height="15%" childLayout="center">  
+        <panel id="panel_top_right2" width="100%" height="20%" childLayout="center">  
         </panel>
-        <panel id="panel_bot_right" width="100%" height="70%" valign="center">  
+        <panel id="panel_bot_right" width="100%" height="50%" valign="center">  
         </panel>
       </panel>
     </layer>
