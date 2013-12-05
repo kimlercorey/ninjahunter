@@ -39,7 +39,9 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Random;
 
 /** NinjaHunter Main Class */
@@ -67,9 +69,12 @@ public class NinjaHunter extends SimpleApplication
     Nifty nifty;
     MyStartScreen screenControl;
     public boolean isRunning = false;
+    public int score = 0;
+    public static int levelTime = 300; //300 seconds = 5 minutes
+    public static long start = 0;
 
     static {
-      /** Initialize the bullet geometry and collision */
+      // Initialize the bullet geometry and collision
       sphere = new Sphere(16, 16, 0.2f, true, false);
       sphere.setTextureMode(Sphere.TextureMode.Projected);
       sphereCollisionShape = new SphereCollisionShape(0.2f);
@@ -134,7 +139,7 @@ public class NinjaHunter extends SimpleApplication
         createNinjas();
         createScene();
         loadPlayer();
-        initCrossHairs();
+        initCrossHairs(); 
     }
 
     /** Add light to the scene */
@@ -216,6 +221,22 @@ public class NinjaHunter extends SimpleApplication
             if (down)  { walkDirection.addLocal(camDir.negate()); }
             player.setWalkDirection(walkDirection);
             cam.setLocation(player.getPhysicsLocation()); 
+            
+            // Update Timer
+            if (System.currentTimeMillis() - start >= 1000) {
+                // Every second, decrease level time by 1
+                levelTime -= 1;
+                start = System.currentTimeMillis();
+            }
+            
+            // Exit game if 5 minutes has passed
+            if (levelTime == 0) {
+                System.exit(0);
+            }
+            
+            // Update HUD resources
+            nifty.getCurrentScreen().findElementByName("score").getRenderer(TextRenderer.class).setText("Score: " + score);
+            nifty.getCurrentScreen().findElementByName("timeLeft").getRenderer(TextRenderer.class).setText("Elapsed Time: " + levelTime/60 + ":" + levelTime%60);
         }
     }
   
@@ -342,6 +363,9 @@ public class NinjaHunter extends SimpleApplication
                           deadNinja = z;
                       }
                   }
+                  
+                  //increment score
+                  score += 100;
 
                   // remove ninja from physics and scene
                   rootNode.detachChild(ninjaNode);
