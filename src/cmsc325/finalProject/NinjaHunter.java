@@ -1,5 +1,5 @@
 /*
- * Filename:    CoinFlip.java
+ * Filename:    NinjaHunter.java
  * Author:      Eduardo R. Rivas, Bryan J. VerHoven, KC
  * Class:       CMSC 325
  * Date:        4 Dec 2013
@@ -71,6 +71,7 @@ public class NinjaHunter extends SimpleApplication
     public int score = 0;
     public static int levelTime = 300; //300 seconds = 5 minutes
     public static long start = 0;
+    public int bulletsFired = 0;
 
     static {
       // Initialize the bullet geometry and collision
@@ -236,6 +237,8 @@ public class NinjaHunter extends SimpleApplication
             // Update HUD resources
             nifty.getCurrentScreen().findElementByName("score").getRenderer(TextRenderer.class).setText("Score: " + score);
             nifty.getCurrentScreen().findElementByName("timeLeft").getRenderer(TextRenderer.class).setText("Elapsed Time: " + levelTime/60 + ":" + levelTime%60);
+            nifty.getCurrentScreen().findElementByName("bulletsFired").getRenderer(TextRenderer.class).setText(bulletsFired);
+            //Add the other resources right here to be updated on the HUD... be sure to add element to XML file first
         }
     }
   
@@ -334,6 +337,9 @@ public class NinjaHunter extends SimpleApplication
 
         // Shoots the bullet
         bullet_phy.setLinearVelocity(cam.getDirection().mult(100));
+        
+        // Increment bullets Fired resource by 1
+        bulletsFired += 1;
     }
   
     /** Collision handler */
