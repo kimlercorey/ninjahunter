@@ -41,7 +41,6 @@ import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Random;
 
 /** NinjaHunter Main Class */
