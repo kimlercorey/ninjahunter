@@ -40,8 +40,14 @@ import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
+import java.util.Scanner;
 
 /** NinjaHunter Main Class */
 public class NinjaHunter extends SimpleApplication
@@ -70,15 +76,19 @@ public class NinjaHunter extends SimpleApplication
     MyStartScreen screenControl;
     public boolean isRunning = false;
     public int score = 0;
+    public int highscore;
     public static int levelTime = 300; //300 seconds = 5 minutes
     public static long start = 0;
-    public int bulletsFired = 0;
+    public int bulletsFired = 0;  
+    public static File file;
 
     static {
       // Initialize the bullet geometry and collision
       sphere = new Sphere(16, 16, 0.2f, true, false);
       sphere.setTextureMode(Sphere.TextureMode.Projected);
       sphereCollisionShape = new SphereCollisionShape(0.2f);
+      
+      file = new File("high_score.txt");
     }
 
     /** Main method */
@@ -94,7 +104,11 @@ public class NinjaHunter extends SimpleApplication
         ninjaHunterApplication.setSettings(ninjaHunterSettings);
         ninjaHunterApplication.setDisplayFps(isDebug);
         ninjaHunterApplication.setDisplayStatView(isDebug);
+        
+        
 
+        
+        
         // Start the launch screen
         ninjaHunterApplication.start();
     }
@@ -103,6 +117,10 @@ public class NinjaHunter extends SimpleApplication
     public void simpleInitApp() {
         //disable flycam
         flyCam.setEnabled(false);
+        
+        // TODO: get the pre-existing highscore
+        highscore = readHighscore(); 
+
         
         // Initialize GUI
         NiftyJmeDisplay display = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort); //create jme-nifty-processor
@@ -235,8 +253,11 @@ public class NinjaHunter extends SimpleApplication
                 System.exit(0);
             }
             
+            // If the current score is greater than highscore, set the highscore
+            if (score > highscore ) { highscore = increaseScore(score);}
+            
             // Update HUD resources
-            nifty.getCurrentScreen().findElementByName("score").getRenderer(TextRenderer.class).setText("Score: " + score + " High: TODO");
+            nifty.getCurrentScreen().findElementByName("score").getRenderer(TextRenderer.class).setText("Score: " + score + "      Local High Score :"+ highscore);
             nifty.getCurrentScreen().findElementByName("timeLeft").getRenderer(TextRenderer.class).setText("Elapsed Time: " + levelTime/60 + ":" + levelTime%60);
             nifty.getCurrentScreen().findElementByName("bulletsFired").getRenderer(TextRenderer.class).setText("Bullets Fired: " + bulletsFired + "/unlimited");
             nifty.getCurrentScreen().findElementByName("target0Score").getRenderer(TextRenderer.class).setText("Ninja0: " + targetScore[0]);
@@ -384,6 +405,8 @@ public class NinjaHunter extends SimpleApplication
                   
                   //increment score
                   score += 100;
+                  
+    
 
                   // remove ninja from physics and scene
                   rootNode.detachChild(ninjaNode);
@@ -422,4 +445,65 @@ public class NinjaHunter extends SimpleApplication
         // Attach the ninja and get Physics space
         bulletAppState.getPhysicsSpace().add(ninja[ninjaArrayNumber]);
     }
+    
+
+    // Read the current Highscore
+    public int readHighscore() {
+        
+        int i = 0;
+        
+        try {
+ 	  // only do this if file exists
+            if (!file.exists()) {
+		return 0;
+            }
+ 
+	  Scanner scanner = new Scanner(file);
+            try { if(scanner.hasNextInt()){
+                    i = scanner.nextInt();
+            }} catch (Exception e) { /* do nothing */}
+            
+	} catch (Exception e) { /* Do Nothing */}
+        
+        return i;
+    }
+    
+    
+    // Set the highscore file to the current score
+    public Integer increaseScore(Integer amount) {
+        try {
+ 	  // create highscore if needed
+            if (!file.exists()) {
+		file.createNewFile();
+            }
+ 
+	  FileWriter fw = new FileWriter(file.getAbsoluteFile());
+	  BufferedWriter bw = new BufferedWriter(fw);
+	  bw.write(amount.toString());
+	  bw.close();
+ 
+	} catch (IOException e) { /* Do Nothing */}
+        
+        return amount;
+    }
+    
+    
   }
+
+
+
+// TODO: (KC) Simple directions for running the game should be included on the screen
+// TODO: (KC) High score should be stored in an ASCII file
+// TODO: (KC) (Optional) Enhancements 
+// TODO: (KC) (Optional) Sound Effects
+// TODO: A Heads-up Display should be provided with a minimum of score totals for each target, total score, high score, and the number of bullets/missiles fired.
+/* 
+ * TODO: 2-5 page design document (See below. Assigned to All 3 of us)
+ *  
+ * Well-written word document describing: 
+ *   - Your overall design
+ *   - Your test plan, including test data and results
+ *   - Your approach, lessons learned, design strengths, limitations and suggestions for future improvement and alternative approaches
+ */
+
+
