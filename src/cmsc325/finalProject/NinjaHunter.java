@@ -40,10 +40,8 @@ import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.render.TextRenderer;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
@@ -102,8 +100,8 @@ public class NinjaHunter extends SimpleApplication
         ninjaHunterSettings.setSettingsDialogImage("Interface/Images/Ninja.jpg");
         ninjaHunterSettings.setTitle("NinjaHunter - Team Asteroids");
         ninjaHunterApplication.setSettings(ninjaHunterSettings);
-        ninjaHunterApplication.setDisplayFps(isDebug);
-        ninjaHunterApplication.setDisplayStatView(isDebug);
+        //ninjaHunterApplication.setDisplayFps(isDebug);
+        //ninjaHunterApplication.setDisplayStatView(isDebug);
         
         
 
@@ -435,14 +433,20 @@ public class NinjaHunter extends SimpleApplication
         ninja[ninjaArrayNumber].setName("Ninja");
         ninja[ninjaArrayNumber].setLocalTranslation((randomLocation),30.0f,5.0f); //(i*20.0f),2.0f,(i*5.0f)
         ninja[ninjaArrayNumber].rotate(0f,180*FastMath.DEG_TO_RAD,0f);
-        ninja[ninjaArrayNumber].scale(0.05f, 0.05f, 0.005f);
+        ninja[ninjaArrayNumber].scale(0.05f, 0.05f, 0.05f);
+        //ninja[ninjaArrayNumber].
         rootNode.attachChild(ninja[ninjaArrayNumber]);
 
         // Set up collision detection for the ninja
         ninjaShape[ninjaArrayNumber] = CollisionShapeFactory.createDynamicMeshShape((Spatial) ninja[ninjaArrayNumber]);
+       // ninjaShape[ninjaArrayNumber].
+        
         ninjaBody[ninjaArrayNumber] = new RigidBodyControl(ninjaShape[ninjaArrayNumber], 1f);
+        
+        ninjaBody[ninjaArrayNumber].setAngularDamping(100f);
         ninja[ninjaArrayNumber].addControl(ninjaBody[ninjaArrayNumber]);
 
+        
         // Attach the ninja and get Physics space
         bulletAppState.getPhysicsSpace().add(ninja[ninjaArrayNumber]);
     }
@@ -493,7 +497,7 @@ public class NinjaHunter extends SimpleApplication
 
 
 
-// TODO: (KC) Simple directions for running the game should be included on the screen
+
 // TODO: (KC) (Optional) Enhancements 
 // TODO: (KC) (Optional) Sound Effects
 
