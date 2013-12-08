@@ -7,7 +7,9 @@
  */
 package cmsc325.finalProject;
 
-/** import libraries */
+/**
+ * import libraries
+ */
 import com.jme3.app.SimpleApplication;
 import static com.jme3.app.SimpleApplication.INPUT_MAPPING_EXIT;
 import com.jme3.app.state.AppState;
@@ -48,12 +50,15 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
-/** NinjaHunter Main Class */
+/**
+ * NinjaHunter Main Class
+ */
 public class NinjaHunter extends SimpleApplication
         implements PhysicsCollisionListener {
-    
 
-    /** Set global variables */
+    /**
+     * Set global variables
+     */
     public static boolean isDebug = false;
     Material mat_brick;
     private RigidBodyControl bullet_phy;
@@ -78,22 +83,24 @@ public class NinjaHunter extends SimpleApplication
     public int highscore;
     public static int levelTime = 300; //300 seconds = 5 minutes
     public static long start = 0;
-    public int bulletsFired = 0;  
+    public int bulletsFired = 0;
     public static File file;
     private AudioNode backgroundMusic;
     private AudioNode shot;
     private AudioNode hit;
 
     static {
-      // Initialize the bullet geometry and collision
-      sphere = new Sphere(16, 16, 0.2f, true, false);
-      sphere.setTextureMode(Sphere.TextureMode.Projected);
-      sphereCollisionShape = new SphereCollisionShape(0.2f);
-      
-      file = new File("high_score.txt");
+        // Initialize the bullet geometry and collision
+        sphere = new Sphere(16, 16, 0.2f, true, false);
+        sphere.setTextureMode(Sphere.TextureMode.Projected);
+        sphereCollisionShape = new SphereCollisionShape(0.2f);
+
+        file = new File("high_score.txt");
     }
 
-    /** Main method */
+    /**
+     * Main method
+     */
     public static void main(String[] args) {
         // Create an instance of the main game
         NinjaHunter ninjaHunterApplication = new NinjaHunter();
@@ -106,23 +113,20 @@ public class NinjaHunter extends SimpleApplication
         ninjaHunterApplication.setSettings(ninjaHunterSettings);
         ninjaHunterApplication.setDisplayFps(isDebug);
         ninjaHunterApplication.setDisplayStatView(isDebug);
-        
-        
 
-        
-        
         // Start the launch screen
         ninjaHunterApplication.start();
     }
 
-    /** Init App Method */
+    /**
+     * Init App Method
+     */
     public void simpleInitApp() {
         //disable flycam
         flyCam.setEnabled(false);
-        
-        highscore = readHighscore(); 
 
-        
+        highscore = readHighscore();
+
         // Initialize GUI
         NiftyJmeDisplay display = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort); //create jme-nifty-processor
         nifty = display.getNifty();
@@ -132,15 +136,17 @@ public class NinjaHunter extends SimpleApplication
         stateManager.attach((AppState) screenControl);
         guiViewPort.addProcessor(display);
     }
-    
-    /** Loads the main game */
-    public void LoadMainGame() { 
+
+    /**
+     * Loads the main game
+     */
+    public void LoadMainGame() {
         // Set up Physics
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
         bulletAppState.getPhysicsSpace().addCollisionListener(this);
-        //bulletAppState.getPhysicsSpace().enableDebug(assetManager);
-        
+        bulletAppState.getPhysicsSpace().enableDebug(assetManager);
+
         // Attach HUD screen to the stateManager
         MyStartScreen screenControl3 = (MyStartScreen) nifty.getScreen("hud").getScreenController();
         stateManager.attach((AppState) screenControl3);
@@ -152,8 +158,6 @@ public class NinjaHunter extends SimpleApplication
         flyCam.setEnabled(true);
         flyCam.setMoveSpeed(100);
 
-        initAudio();
-        
         // main setup function calls
         setUpKeys();
         setUpLight();
@@ -162,10 +166,13 @@ public class NinjaHunter extends SimpleApplication
         createScene();
         loadPlayer();
         initCrossHairs();
-        
+        initAudio();
+
     }
 
-    /** Add light to the scene */
+    /**
+     * Add light to the scene
+     */
     private void setUpLight() {
         AmbientLight al = new AmbientLight();
         al.setColor(ColorRGBA.White.mult(1.3f));
@@ -176,11 +183,13 @@ public class NinjaHunter extends SimpleApplication
         rootNode.addLight(dl);
     }
 
-    /** Set up the key/mouse input */
+    /**
+     * Set up the key/mouse input
+     */
     private void setUpKeys() {
         // Delete the default Esc-to-close mapping
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
-        
+
         // Add mappings for actions
         inputManager.addMapping("shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
@@ -189,7 +198,7 @@ public class NinjaHunter extends SimpleApplication
         inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addMapping("Escape", new KeyTrigger(KeyInput.KEY_ESCAPE));
-        
+
         // Add action listeners
         inputManager.addListener(actionListener, "Left");
         inputManager.addListener(actionListener, "Right");
@@ -199,8 +208,9 @@ public class NinjaHunter extends SimpleApplication
         inputManager.addListener(actionListener, "shoot");
         inputManager.addListener(actionListener, "Escape");
     }
-
-    /** Action responses */
+    /**
+     * Action responses
+     */
     private ActionListener actionListener = new ActionListener() {
         public void onAction(String binding, boolean keyPressed, float tpf) {
             if (isRunning) {
@@ -217,56 +227,68 @@ public class NinjaHunter extends SimpleApplication
                 } else if (binding.equals("Left")) {
                     left = keyPressed;
                 } else if (binding.equals("Right")) {
-                  right = keyPressed;
+                    right = keyPressed;
                 } else if (binding.equals("Up")) {
-                  up = keyPressed;
+                    up = keyPressed;
                 } else if (binding.equals("Down")) {
-                  down = keyPressed;
+                    down = keyPressed;
                 } else if (binding.equals("Jump")) {
-                  player.jump();
+                    player.jump();
                 }
             }
         }
     };
 
-    /** Update Loop! */
+    /**
+     * Update Loop!
+     */
     @Override
     public void simpleUpdate(float tpf) {
         if (isRunning) {
-            
+
             // play the ambient sound continuously
             backgroundMusic.play();
-            
+
             flyCam.setEnabled(true);
             inputManager.setCursorVisible(false);
             Vector3f camDir = cam.getDirection().clone().multLocal(0.6f);
             Vector3f camLeft = cam.getLeft().clone().multLocal(0.4f);
             walkDirection.set(0, 0, 0);
-            if (left)  { walkDirection.addLocal(camLeft); }
-            if (right) { walkDirection.addLocal(camLeft.negate()); }
-            if (up)    { walkDirection.addLocal(camDir); }
-            if (down)  { walkDirection.addLocal(camDir.negate()); }
+            if (left) {
+                walkDirection.addLocal(camLeft);
+            }
+            if (right) {
+                walkDirection.addLocal(camLeft.negate());
+            }
+            if (up) {
+                walkDirection.addLocal(camDir);
+            }
+            if (down) {
+                walkDirection.addLocal(camDir.negate());
+            }
             player.setWalkDirection(walkDirection);
-            cam.setLocation(player.getPhysicsLocation()); 
-            
+            cam.setLocation(player.getPhysicsLocation());
+
             // Update Timer
             if (System.currentTimeMillis() - start >= 1000) {
                 // Every second, decrease level time by 1
                 levelTime -= 1;
                 start = System.currentTimeMillis();
             }
-            
+
             // Exit game if 5 minutes has passed
             if (levelTime == 0) {
                 System.exit(0);
             }
-            
+
             // If the current score is greater than highscore, set the highscore
-            if (score > highscore ) { highscore = increaseScore(score);}
-            
+            if (score > highscore) {
+                highscore = increaseScore(score);
+            }
+
             // Update HUD resources
-            nifty.getCurrentScreen().findElementByName("score").getRenderer(TextRenderer.class).setText("Score: " + score + "      Local High Score :"+ highscore);
-            nifty.getCurrentScreen().findElementByName("timeLeft").getRenderer(TextRenderer.class).setText("Elapsed Time: " + levelTime/60 + ":" + levelTime%60);
+            nifty.getCurrentScreen().findElementByName("score").getRenderer(TextRenderer.class).setText("Score: " + score + "      Local High Score :" + highscore);
+            nifty.getCurrentScreen().findElementByName("timeLeft").getRenderer(TextRenderer.class).setText("Elapsed Time: " + levelTime / 60 + ":" + levelTime % 60);
             nifty.getCurrentScreen().findElementByName("bulletsFired").getRenderer(TextRenderer.class).setText("Bullets Fired: " + bulletsFired + "/unlimited");
             nifty.getCurrentScreen().findElementByName("target0Score").getRenderer(TextRenderer.class).setText("Ninja0: " + targetScore[0]);
             nifty.getCurrentScreen().findElementByName("target1Score").getRenderer(TextRenderer.class).setText("Ninja1: " + targetScore[1]);
@@ -275,18 +297,20 @@ public class NinjaHunter extends SimpleApplication
             nifty.getCurrentScreen().findElementByName("target4Score").getRenderer(TextRenderer.class).setText("Ninja4: " + targetScore[4]);
         }
     }
-  
-    /** Initialize the materials used in the scene */
-    public void initMaterials() {
-        mat_brick = new Material( 
-        assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat_brick.setTexture("ColorMap", 
-        assetManager.loadTexture("Textures/Terrain/BrickWall/BrickWall.jpg"));
-    }
-  
 
-  
-    /** Create the scene */
+    /**
+     * Initialize the materials used in the scene
+     */
+    public void initMaterials() {
+        mat_brick = new Material(
+                assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat_brick.setTexture("ColorMap",
+                assetManager.loadTexture("Textures/Terrain/BrickWall/BrickWall.jpg"));
+    }
+
+    /**
+     * Create the scene
+     */
     public void createScene() {
         // Load the scene and adjust its size
         sceneModel = assetManager.loadModel("Scenes/main.j3o");
@@ -302,8 +326,10 @@ public class NinjaHunter extends SimpleApplication
         rootNode.attachChild(sceneModel);
         bulletAppState.getPhysicsSpace().add(landscape);
     }
-  
-    /** Initialize the player */
+
+    /**
+     * Initialize the player
+     */
     public void loadPlayer() {
         // Set up collision detection for the player
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 6f, 1);
@@ -316,26 +342,28 @@ public class NinjaHunter extends SimpleApplication
         // Add to physics space
         bulletAppState.getPhysicsSpace().add(player);
     }
-  
-    /** Set up the crosshairs */
+
+    /**
+     * Set up the crosshairs
+     */
     protected void initCrossHairs() {
         guiNode.detachAllChildren();
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         BitmapText ch = new BitmapText(guiFont, false);
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
-        ch.setText("+"); 
+        ch.setText("+");
         ch.setLocalTranslation(
-        settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
-        settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+                settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
+                settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
         guiNode.attachChild(ch);
     }
-  
+
     /* Creates the bullet */
     public void makeBullet() {
-        
+
         // play sound
         shot.playInstance();
-            
+
         // Create a bullet geometry and attach to scene
         Geometry bullet_geo = new Geometry("bullet", sphere);
         bullet_geo.setMaterial(mat_brick);
@@ -352,63 +380,67 @@ public class NinjaHunter extends SimpleApplication
 
         // Shoots the bullet
         bullet_phy.setLinearVelocity(cam.getDirection().mult(100));
-        
+
         // Increment bullets Fired resource by 1
         bulletsFired += 1;
-        
+
         score -= 25;
     }
-  
-    /** Collision handler */
+
+    /**
+     * Collision handler
+     */
     public void collision(PhysicsCollisionEvent event) {
-          try {
-              // Declare variables local to the function
-              final Spatial nodea = event.getNodeA();
-              final Spatial nodeb = event.getNodeB();
-              Spatial ninjaNode = null;
-              int deadNinja = 0;
+        try {
+            // Declare variables local to the function
+            final Spatial nodea = event.getNodeA();
+            final Spatial nodeb = event.getNodeB();
+            Spatial ninjaNode = null;
+            int deadNinja = 0;
 
-              // If one node is the Ninja and the other is the bullet...
-              if ((nodea.getName() == "Ninja" && nodeb.getName() == "bullet")
-                   || (nodea.getName() == "bullet" && nodeb.getName() == "Ninja")) {
+            // If one node is the Ninja and the other is the bullet...
+            if ((nodea.getName() == "Ninja" && nodeb.getName() == "bullet")
+                    || (nodea.getName() == "bullet" && nodeb.getName() == "Ninja")) {
 
-                  // store the ninja node
-                  if (nodea.getName() == "Ninja") {
-                      ninjaNode = event.getNodeA();
-                  }else {
-                      ninjaNode = event.getNodeB();
-                  }
+                // store the ninja node
+                if (nodea.getName() == "Ninja") {
+                    ninjaNode = event.getNodeA();
+                } else {
+                    ninjaNode = event.getNodeB();
+                }
 
-                  // loop to check which ninja was hit
-                  for (int z = 0;z<5;z++) {
-                      if (ninjaNode.equals(ninja[z])) {
-                          // which ninja died?
-                          deadNinja = z;
-                          
-                          // increment score for that target!
-                          targetScore[z] += 100;
-                      }
-                  }
-                  
-                  //increment score
-                  score += 100;
-                  
-                  // play sound
-                  hit.playInstance();
-    
+                // loop to check which ninja was hit
+                for (int z = 0; z < 5; z++) {
+                    if (ninjaNode.equals(ninja[z])) {
+                        // which ninja died?
+                        deadNinja = z;
 
-                  // remove ninja from physics and scene
-                  rootNode.detachChild(ninjaNode);
-                  bulletAppState.getPhysicsSpace().remove(ninjaNode);
+                        // increment score for that target!
+                        targetScore[z] += 100;
+                    }
+                }
 
-                  // relocate ninja back in the air
-                  relocateNinja(deadNinja);
-              }
+                //increment score
+                score += 100;
 
-          } catch (Exception e) {
-              // dreams computers compute when asked "do nothing"
-          }
-      };
+                // play sound
+                hit.playInstance();
+
+
+                // remove ninja from physics and scene
+                rootNode.detachChild(ninjaNode);
+                bulletAppState.getPhysicsSpace().remove(ninjaNode);
+
+                // relocate ninja back in the air
+                relocateNinja(deadNinja);
+            }
+
+        } catch (Exception e) {
+            // dreams computers compute when asked "do nothing"
+        }
+    }
+
+    ;
     
    public void initAudio() {
         // hit a target
@@ -417,7 +449,7 @@ public class NinjaHunter extends SimpleApplication
         hit.setLooping(false);
         hit.setVolume(2);
         rootNode.attachChild(hit);
-        
+
         shot = new AudioNode(assetManager, "Sounds/shot.ogg");
         shot.setPositional(false);
         shot.setLooping(false);
@@ -436,8 +468,10 @@ public class NinjaHunter extends SimpleApplication
     public void stopbackgroundMusic() {
         backgroundMusic.stop();
     }
-  
-        /** Create ninjas initially in the scene */
+
+    /**
+     * Create ninjas initially in the scene
+     */
     public void createNinjas() {
         // Create arrays
         ninjaBody = new RigidBodyControl[10];
@@ -445,117 +479,106 @@ public class NinjaHunter extends SimpleApplication
         ninjaShape = new CollisionShape[10];
         targetScore = new int[10];
 
-        for (int i=0;i<5;i++) {
+        for (int i = 0; i < 5; i++) {
             ninja[i] = assetManager.loadModel("Models/Ninja/Ninja.mesh.xml");
             ninja[i].setName("Ninja");
-            ninja[i].setLocalTranslation((i*20.0f),30.0f,5.0f); //(i*20.0f),2.0f,(i*5.0f)
-            ninja[i].rotate(0f,180*FastMath.DEG_TO_RAD,0f);
+            ninja[i].setLocalTranslation((i * 20.0f), 30.0f, 5.0f); //(i*20.0f),2.0f,(i*5.0f)
+            ninja[i].rotate(0f, 180 * FastMath.DEG_TO_RAD, 0f);
             ninja[i].scale(0.05f, 0.05f, 0.05f);
 
             // Set up collision detection for the ninja
             ninjaShape[i] = CollisionShapeFactory.createDynamicMeshShape((Spatial) ninja[i]);
             ninjaBody[i] = new RigidBodyControl(ninjaShape[i], 1f);
-            
+
             ninjaBody[i].setAngularDamping(100f);
-            
+
             ninja[i].addControl(ninjaBody[i]);
 
             // Attach ninja to scene and add to physics space
             rootNode.attachChild(ninja[i]);
             bulletAppState.getPhysicsSpace().add(ninja[i]);
-            
+
             // Initialize the score variable
             targetScore[i] = 0;
         }
     }
-    
-    /** Function that respawns the dead ninja */
+
+    /**
+     * Function that respawns the dead ninja
+     */
     public void relocateNinja(int ninjaArrayNumber) {
         //generate random number to spawn ninja at location
         Random r = new Random();
         int Low = 0;
         int High = 80;
-        int randomLocation = r.nextInt(High-Low)+Low;
+        int randomLocation = r.nextInt(High - Low) + Low;
 
         // add ninja to scene again
         ninja[ninjaArrayNumber] = assetManager.loadModel("Models/Ninja/Ninja.mesh.xml");
         ninja[ninjaArrayNumber].setName("Ninja");
-        ninja[ninjaArrayNumber].setLocalTranslation((randomLocation),30.0f,5.0f); //(i*20.0f),2.0f,(i*5.0f)
-        ninja[ninjaArrayNumber].rotate(0f,180*FastMath.DEG_TO_RAD,0f);
+        ninja[ninjaArrayNumber].setLocalTranslation((randomLocation), 30.0f, 5.0f); //(i*20.0f),2.0f,(i*5.0f)
+        ninja[ninjaArrayNumber].rotate(0f, 180 * FastMath.DEG_TO_RAD, 0f);
         ninja[ninjaArrayNumber].scale(0.05f, 0.05f, 0.05f);
 
         rootNode.attachChild(ninja[ninjaArrayNumber]);
 
         // Set up collision detection for the ninja
         ninjaShape[ninjaArrayNumber] = CollisionShapeFactory.createDynamicMeshShape((Spatial) ninja[ninjaArrayNumber]);
-        
+
         ninjaBody[ninjaArrayNumber] = new RigidBodyControl(ninjaShape[ninjaArrayNumber], 1f);
-        
+
         ninjaBody[ninjaArrayNumber].setAngularDamping(100f);
         ninja[ninjaArrayNumber].addControl(ninjaBody[ninjaArrayNumber]);
 
-        
+
         // Attach the ninja and get Physics space
         bulletAppState.getPhysicsSpace().add(ninja[ninjaArrayNumber]);
     }
-    
 
     // Read the current Highscore
     public int readHighscore() {
-        
+
         int i = 0;
-        
+
         try {
- 	  // only do this if file exists
+            // only do this if file exists
             if (!file.exists()) {
-		return 0;
+                return 0;
             }
- 
-	  Scanner scanner = new Scanner(file);
-            try { if(scanner.hasNextInt()){
+
+            Scanner scanner = new Scanner(file);
+            try {
+                if (scanner.hasNextInt()) {
                     i = scanner.nextInt();
-            }} catch (Exception e) { /* do nothing */}
-            
-	} catch (Exception e) { /* Do Nothing */}
-        
+                }
+            } catch (Exception e) { /* do nothing */
+
+            }
+
+        } catch (Exception e) { /* Do Nothing */
+
+        }
+
         return i;
     }
-    
-    
+
     // Set the highscore file to the current score
     public Integer increaseScore(Integer amount) {
         try {
- 	  // create highscore if needed
+            // create highscore if needed
             if (!file.exists()) {
-		file.createNewFile();
+                file.createNewFile();
             }
- 
-	  FileWriter fw = new FileWriter(file.getAbsoluteFile());
-	  BufferedWriter bw = new BufferedWriter(fw);
-	  bw.write(amount.toString());
-	  bw.close();
- 
-	} catch (IOException e) { /* Do Nothing */}
-        
+
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(amount.toString());
+            bw.close();
+
+        } catch (IOException e) { /* Do Nothing */
+
+        }
+
         return amount;
     }
-    
-    
-  }
-
-
-
-
-// TODO: (KC) (Optional) Enhancements 
-// TODO: (KC) (Optional) Sound Effects
-
-/* 
- * TODO: 2-5 page design document (See below. Assigned to All 3 of us)
- *  
- * Well-written word document describing: 
- *   - Your overall design
- *   - Your test plan, including test data and results
- *   - Your approach, lessons learned, design strengths, limitations and suggestions for future improvement and alternative approaches
- */
-
-
+}
