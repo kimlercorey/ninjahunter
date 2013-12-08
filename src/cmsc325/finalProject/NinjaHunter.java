@@ -11,6 +11,7 @@ package cmsc325.finalProject;
 import com.jme3.app.SimpleApplication;
 import static com.jme3.app.SimpleApplication.INPUT_MAPPING_EXIT;
 import com.jme3.app.state.AppState;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
@@ -79,6 +80,9 @@ public class NinjaHunter extends SimpleApplication
     public static long start = 0;
     public int bulletsFired = 0;  
     public static File file;
+    private AudioNode backgroundMusic;
+    private AudioNode shot;
+    private AudioNode hit;
 
     static {
       // Initialize the bullet geometry and collision
@@ -100,8 +104,8 @@ public class NinjaHunter extends SimpleApplication
         ninjaHunterSettings.setSettingsDialogImage("Interface/Images/Ninja.jpg");
         ninjaHunterSettings.setTitle("NinjaHunter - Team Asteroids");
         ninjaHunterApplication.setSettings(ninjaHunterSettings);
-        //ninjaHunterApplication.setDisplayFps(isDebug);
-        //ninjaHunterApplication.setDisplayStatView(isDebug);
+        ninjaHunterApplication.setDisplayFps(isDebug);
+        ninjaHunterApplication.setDisplayStatView(isDebug);
         
         
 
@@ -135,7 +139,7 @@ public class NinjaHunter extends SimpleApplication
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
         bulletAppState.getPhysicsSpace().addCollisionListener(this);
-        bulletAppState.getPhysicsSpace().enableDebug(assetManager);
+        //bulletAppState.getPhysicsSpace().enableDebug(assetManager);
         
         // Attach HUD screen to the stateManager
         MyStartScreen screenControl3 = (MyStartScreen) nifty.getScreen("hud").getScreenController();
@@ -148,6 +152,8 @@ public class NinjaHunter extends SimpleApplication
         flyCam.setEnabled(true);
         flyCam.setMoveSpeed(100);
 
+        initAudio();
+        
         // main setup function calls
         setUpKeys();
         setUpLight();
@@ -155,7 +161,8 @@ public class NinjaHunter extends SimpleApplication
         createNinjas();
         createScene();
         loadPlayer();
-        initCrossHairs(); 
+        initCrossHairs();
+        
     }
 
     /** Add light to the scene */
@@ -226,6 +233,10 @@ public class NinjaHunter extends SimpleApplication
     @Override
     public void simpleUpdate(float tpf) {
         if (isRunning) {
+            
+            // play the ambient sound continuously
+            backgroundMusic.play();
+            
             flyCam.setEnabled(true);
             inputManager.setCursorVisible(false);
             Vector3f camDir = cam.getDirection().clone().multLocal(0.6f);
@@ -348,6 +359,10 @@ public class NinjaHunter extends SimpleApplication
   
     /* Creates the bullet */
     public void makeBullet() {
+        
+        // play sound
+        shot.playInstance();
+            
         // Create a bullet geometry and attach to scene
         Geometry bullet_geo = new Geometry("bullet", sphere);
         bullet_geo.setMaterial(mat_brick);
@@ -405,6 +420,8 @@ public class NinjaHunter extends SimpleApplication
                   //increment score
                   score += 100;
                   
+                  // play sound
+                  hit.playInstance();
     
 
                   // remove ninja from physics and scene
@@ -419,6 +436,33 @@ public class NinjaHunter extends SimpleApplication
               // dreams computers compute when asked "do nothing"
           }
       };
+    
+   public void initAudio() {
+        // hit a target
+        hit = new AudioNode(assetManager, "Sounds/hit.ogg");
+        hit.setPositional(false);
+        hit.setLooping(false);
+        hit.setVolume(2);
+        rootNode.attachChild(hit);
+        
+        shot = new AudioNode(assetManager, "Sounds/shot.ogg");
+        shot.setPositional(false);
+        shot.setLooping(false);
+        shot.setVolume(2);
+        rootNode.attachChild(shot);
+
+        // Background music - The Original Ninja Hunter Song
+        backgroundMusic = new AudioNode(assetManager, "Sounds/ninjahunter.ogg", false);
+        backgroundMusic.setPositional(false);
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(3);
+        rootNode.attachChild(backgroundMusic);
+    }
+
+    // function to stop the ambient sound
+    public void stopbackgroundMusic() {
+        backgroundMusic.stop();
+    }
   
     /** Function that respawns the dead ninja */
     public void relocateNinja(int ninjaArrayNumber) {
@@ -500,8 +544,6 @@ public class NinjaHunter extends SimpleApplication
 
 // TODO: (KC) (Optional) Enhancements 
 // TODO: (KC) (Optional) Sound Effects
-
-// TODO: (KC) Fix broken shere to ninja detection
 
 /* 
  * TODO: 2-5 page design document (See below. Assigned to All 3 of us)
