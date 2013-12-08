@@ -118,7 +118,6 @@ public class NinjaHunter extends SimpleApplication
         //disable flycam
         flyCam.setEnabled(false);
         
-        // TODO: get the pre-existing highscore
         highscore = readHighscore(); 
 
         
@@ -370,6 +369,8 @@ public class NinjaHunter extends SimpleApplication
         
         // Increment bullets Fired resource by 1
         bulletsFired += 1;
+        
+        score -= 25;
     }
   
     /** Collision handler */
@@ -493,10 +494,11 @@ public class NinjaHunter extends SimpleApplication
 
 
 // TODO: (KC) Simple directions for running the game should be included on the screen
-// TODO: (KC) High score should be stored in an ASCII file
 // TODO: (KC) (Optional) Enhancements 
 // TODO: (KC) (Optional) Sound Effects
-// TODO: A Heads-up Display should be provided with a minimum of score totals for each target, total score, high score, and the number of bullets/missiles fired.
+
+// TODO: (KC) Fix broken shere to ninja detection
+
 /* 
  * TODO: 2-5 page design document (See below. Assigned to All 3 of us)
  *  
