@@ -284,34 +284,7 @@ public class NinjaHunter extends SimpleApplication
         assetManager.loadTexture("Textures/Terrain/BrickWall/BrickWall.jpg"));
     }
   
-    /** Create ninjas initially in the scene */
-    public void createNinjas() {
-        // Create arrays
-        ninjaBody = new RigidBodyControl[10];
-        ninja = new Spatial[10];
-        ninjaShape = new CollisionShape[10];
-        targetScore = new int[10];
 
-        for (int i=0;i<5;i++) {
-            ninja[i] = assetManager.loadModel("Models/Ninja/Ninja.mesh.xml");
-            ninja[i].setName("Ninja");
-            ninja[i].setLocalTranslation((i*20.0f),30.0f,5.0f); //(i*20.0f),2.0f,(i*5.0f)
-            ninja[i].rotate(0f,180*FastMath.DEG_TO_RAD,0f);
-            ninja[i].scale(0.05f, 0.05f, 0.005f);
-
-            // Set up collision detection for the ninja
-            ninjaShape[i] = CollisionShapeFactory.createDynamicMeshShape((Spatial) ninja[i]);
-            ninjaBody[i] = new RigidBodyControl(ninjaShape[i], 1f);
-            ninja[i].addControl(ninjaBody[i]);
-
-            // Attach ninja to scene and add to physics space
-            rootNode.attachChild(ninja[i]);
-            bulletAppState.getPhysicsSpace().add(ninja[i]);
-            
-            // Initialize the score variable
-            targetScore[i] = 0;
-        }
-    }
   
     /** Create the scene */
     public void createScene() {
@@ -464,6 +437,38 @@ public class NinjaHunter extends SimpleApplication
         backgroundMusic.stop();
     }
   
+        /** Create ninjas initially in the scene */
+    public void createNinjas() {
+        // Create arrays
+        ninjaBody = new RigidBodyControl[10];
+        ninja = new Spatial[10];
+        ninjaShape = new CollisionShape[10];
+        targetScore = new int[10];
+
+        for (int i=0;i<5;i++) {
+            ninja[i] = assetManager.loadModel("Models/Ninja/Ninja.mesh.xml");
+            ninja[i].setName("Ninja");
+            ninja[i].setLocalTranslation((i*20.0f),30.0f,5.0f); //(i*20.0f),2.0f,(i*5.0f)
+            ninja[i].rotate(0f,180*FastMath.DEG_TO_RAD,0f);
+            ninja[i].scale(0.05f, 0.05f, 0.05f);
+
+            // Set up collision detection for the ninja
+            ninjaShape[i] = CollisionShapeFactory.createDynamicMeshShape((Spatial) ninja[i]);
+            ninjaBody[i] = new RigidBodyControl(ninjaShape[i], 1f);
+            
+            ninjaBody[i].setAngularDamping(100f);
+            
+            ninja[i].addControl(ninjaBody[i]);
+
+            // Attach ninja to scene and add to physics space
+            rootNode.attachChild(ninja[i]);
+            bulletAppState.getPhysicsSpace().add(ninja[i]);
+            
+            // Initialize the score variable
+            targetScore[i] = 0;
+        }
+    }
+    
     /** Function that respawns the dead ninja */
     public void relocateNinja(int ninjaArrayNumber) {
         //generate random number to spawn ninja at location
@@ -478,12 +483,11 @@ public class NinjaHunter extends SimpleApplication
         ninja[ninjaArrayNumber].setLocalTranslation((randomLocation),30.0f,5.0f); //(i*20.0f),2.0f,(i*5.0f)
         ninja[ninjaArrayNumber].rotate(0f,180*FastMath.DEG_TO_RAD,0f);
         ninja[ninjaArrayNumber].scale(0.05f, 0.05f, 0.05f);
-        //ninja[ninjaArrayNumber].
+
         rootNode.attachChild(ninja[ninjaArrayNumber]);
 
         // Set up collision detection for the ninja
         ninjaShape[ninjaArrayNumber] = CollisionShapeFactory.createDynamicMeshShape((Spatial) ninja[ninjaArrayNumber]);
-       // ninjaShape[ninjaArrayNumber].
         
         ninjaBody[ninjaArrayNumber] = new RigidBodyControl(ninjaShape[ninjaArrayNumber], 1f);
         
