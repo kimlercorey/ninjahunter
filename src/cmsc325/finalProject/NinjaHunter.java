@@ -145,7 +145,7 @@ public class NinjaHunter extends SimpleApplication
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
         bulletAppState.getPhysicsSpace().addCollisionListener(this);
-        bulletAppState.getPhysicsSpace().enableDebug(assetManager);
+        //bulletAppState.getPhysicsSpace().enableDebug(assetManager);
 
         // Attach HUD screen to the stateManager
         MyStartScreen screenControl3 = (MyStartScreen) nifty.getScreen("hud").getScreenController();
@@ -295,6 +295,62 @@ public class NinjaHunter extends SimpleApplication
             nifty.getCurrentScreen().findElementByName("target2Score").getRenderer(TextRenderer.class).setText("Ninja2: " + targetScore[2]);
             nifty.getCurrentScreen().findElementByName("target3Score").getRenderer(TextRenderer.class).setText("Ninja3: " + targetScore[3]);
             nifty.getCurrentScreen().findElementByName("target4Score").getRenderer(TextRenderer.class).setText("Ninja4: " + targetScore[4]);
+
+        
+        
+        for (int i = 0; i < 5; i++) {
+            //Vector3f fromEnemy = new Vector3f(flyCam. ).subtractLocal(ninja[ninjaArrayNumber].getWorldTranslation() ).normalizeLocal().scale( time );
+        //ninja[ninjaArrayNumber].lookAt(flyCam.getDirection(), Vector3f.UNIT_Y );
+        
+        Vector3f playerLocation = player.getPhysicsLocation();//.mult(new Vector3f(1, 180 * FastMath.DEG_TO_RAD,1));
+        Vector3f thisNinjaLocation = ninjaBody[i].getPhysicsLocation(); 
+        
+        float enemyDistance = playerLocation.distance(thisNinjaLocation); 
+        
+        
+        float enemyAngle = player.getPhysicsLocation().angleBetween(thisNinjaLocation);
+        
+        
+        if (thisNinjaLocation.y < .5) ninjaBody[i].setKinematic(true);
+        
+        
+        ninja[i].lookAt(playerLocation, Vector3f.UNIT_Y);
+
+        
+        //System.out.println(playerAngle* FastMath.DEG_TO_RAD);
+        
+        //if(enemyDistance > 1.0f) {
+            // look at player (auto-rotate)
+                //ninja[i].lookAt(playerLocation.getWorldPosition(), Vector3f.UNIT_Y.clone()); //.lookAt(player, Vector3f.UNIT_Y);
+                //ninja[i].rotate(0f, 180 * FastMath.DEG_TO_RAD, 0f);
+                
+                
+                
+            // get direction
+             Vector3f dir = thisNinjaLocation;// .subtract(player).normalize();
+            // move towards player
+             float vel = .005f;
+            //ninja[i].move(dir.x*tpf*vel, 0, dir.z*tpf*vel);
+            //ninjaBody[i].applyForce(new Vector3f(dir.x*tpf*vel,0f,dir.z*tpf*vel));
+            
+            //ninjaBody[i].applyForce(dir, new Vector3f(dir.x*tpf*vel,0f,dir.z*tpf*vel));
+             
+             
+             System.out.println("ninja[i].move("+dir.x*tpf*vel+", 0,"+ dir.z*tpf*vel +");" );
+            
+        //}
+        
+        
+        
+        
+        Vector3f targetDirection = ninja[i].getLocalTranslation().subtract(
+        playerLocation).normalizeLocal();
+        }
+        
+        
+        
+        
+        
         }
     }
 
@@ -474,16 +530,19 @@ public class NinjaHunter extends SimpleApplication
      */
     public void createNinjas() {
         // Create arrays
+        Spatial ninja_proto = assetManager.loadModel("Models/Ninja/Ninja.mesh.j3o");
+        ninja_proto.rotate(0f, 180 * FastMath.DEG_TO_RAD, 0f);
+        
         ninjaBody = new RigidBodyControl[10];
         ninja = new Spatial[10];
         ninjaShape = new CollisionShape[10];
         targetScore = new int[10];
 
         for (int i = 0; i < 5; i++) {
-            ninja[i] = assetManager.loadModel("Models/Ninja/Ninja.mesh.xml");
+            ninja[i] = ninja_proto.clone();
             ninja[i].setName("Ninja");
             ninja[i].setLocalTranslation((i * 20.0f), 30.0f, 5.0f); //(i*20.0f),2.0f,(i*5.0f)
-            ninja[i].rotate(0f, 180 * FastMath.DEG_TO_RAD, 0f);
+            //ninja[i].rotate(0f, 180 * FastMath.DEG_TO_RAD, 0f);
             ninja[i].scale(0.05f, 0.05f, 0.05f);
 
             // Set up collision detection for the ninja
@@ -507,6 +566,10 @@ public class NinjaHunter extends SimpleApplication
      * Function that respawns the dead ninja
      */
     public void relocateNinja(int ninjaArrayNumber) {
+        
+        Spatial ninja_proto = assetManager.loadModel("Models/Ninja/Ninja.mesh.j3o");
+        ninja_proto.rotate(0f, 180 * FastMath.DEG_TO_RAD, 0f);
+        
         //generate random number to spawn ninja at location
         Random r = new Random();
         int Low = 0;
@@ -514,10 +577,10 @@ public class NinjaHunter extends SimpleApplication
         int randomLocation = r.nextInt(High - Low) + Low;
 
         // add ninja to scene again
-        ninja[ninjaArrayNumber] = assetManager.loadModel("Models/Ninja/Ninja.mesh.xml");
+        ninja[ninjaArrayNumber] = ninja_proto.clone();
         ninja[ninjaArrayNumber].setName("Ninja");
         ninja[ninjaArrayNumber].setLocalTranslation((randomLocation), 30.0f, 5.0f); //(i*20.0f),2.0f,(i*5.0f)
-        ninja[ninjaArrayNumber].rotate(0f, 180 * FastMath.DEG_TO_RAD, 0f);
+        //ninja[ninjaArrayNumber].rotate(0f, 180 * FastMath.DEG_TO_RAD, 0f);
         ninja[ninjaArrayNumber].scale(0.05f, 0.05f, 0.05f);
 
         rootNode.attachChild(ninja[ninjaArrayNumber]);
@@ -533,6 +596,12 @@ public class NinjaHunter extends SimpleApplication
 
         // Attach the ninja and get Physics space
         bulletAppState.getPhysicsSpace().add(ninja[ninjaArrayNumber]);
+        
+        
+        
+        
+        
+        
     }
 
     // Read the current Highscore
