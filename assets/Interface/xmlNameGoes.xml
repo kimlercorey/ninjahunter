@@ -13,36 +13,21 @@
   <!--                              START SCREEN                               -->
   <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <screen id="start" controller="cmsc325.finalProject.MyStartScreen">
-    <layer id="background" childLayout="center">
-      <panel id="text1" height="25%" width="50%" align="center" childLayout="center">
-      <text wrap="true" text="
-&#10;
-Welcome to Ninja Hunter by Team Asteroids! &#10;
-&#10;
-It's raining ninjas. Can you hold off the falling horde of Ninjas?&#10;
-&#10;
-Shooting a ninja will add 100 to your score. Beat the local high score if you can. &#10;
-&#10;
-&#10;
-Your ammunition is unlimited but each shot costs you 25 points so aim carefully!&#10;
-&#10;
-&#10;
-&#10;
-&#10;&#10;&#10;&#10;&#10;&#10;                                                                
-
-
-
-" font="Interface/Fonts/Default.fnt" width="100%" height="100%" />
-      </panel>
-    </layer>
+    <layer id="background" childLayout="center" backgroundColor="#313131">
+      <panel id="text1" height="25%" width="50%" align="center" childLayout="center">          
+    <image filename="Interface/instructions.jpg" />   </panel>
+   </layer>
     <layer id="foreground" childLayout="vertical">
       <panel id="panel_top" height="25%" width="75%" align="center" childLayout="center"> 
-        <text text="NinjaHunter by Team Asteroids" font="Interface/Fonts/Default.fnt" width="100%" height="100%" /> 
+       <!-- <text text="NinjaHunter by Team Asteroids" font="Interface/Fonts/Default.fnt" width="100%" height="100%" /> --> 
       </panel>
       <panel id="panel_mid" height="60%" width="75%" align="center" childLayout="vertical">  
         <panel id="panel_mid_top" height="99%" width="100%" valign="center" childLayout="center">
+            
         </panel>
+        
         <panel id="panel_mid_bottom" height="1%" width="100%" valign="center" childLayout="center">
+          
          <text text="Press Start Button to begin or Quit Button to exit" font="Interface/Fonts/Default.fnt" width="100%" height="100%" /> 
         </panel>
       </panel>
@@ -55,6 +40,8 @@ Your ammunition is unlimited but each shot costs you 25 points so aim carefully!
         </panel>
         <!-- +++++++++++++++++++++++ Players BUTTONs +++++++++++++++++++++++++++++++ -->
         <panel id="panel_bottom_mid" height="50%" width="20%" valign="center" childLayout="center">
+            
+                <text text="Read the most current news: http://goo.gl/bVfzVT" color="#666" font="Interface/Fonts/Default.fnt" width="50%" height="100%" />  
           <!-- <control name="button" label="Player 1" id="Player1Button" align="left" valign="center" visibleToMouse="true">
             <interact onClick="playerName(Player 1)"/>
           </control>
