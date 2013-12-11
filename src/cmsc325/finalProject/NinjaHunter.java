@@ -285,6 +285,11 @@ public class NinjaHunter extends SimpleApplication
             if (score > highscore) {
                 highscore = increaseScore(score);
             }
+            
+            // Do not allow a negative score
+            if (score < 0) {
+                score = 0;
+            }
 
             // Update HUD resources
             nifty.getCurrentScreen().findElementByName("score").getRenderer(TextRenderer.class).setText("Score: " + score + "      Local High Score :" + highscore);
@@ -476,8 +481,12 @@ public class NinjaHunter extends SimpleApplication
                     }
                 }
 
-                //increment score
-                score += 100;
+                // increment score
+                if (score == 0) {
+                    score += 75;
+                } else {
+                    score += 100;
+                }
 
                 // play sound
                 hit.playInstance();
